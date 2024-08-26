@@ -32,8 +32,6 @@ cd cbi-spatial-temporal
 To ensure compatibility, the following R packages and versions were used:
 
 R version:
-|               |                            |
-|---------------|----------------------------|
 |platform       |aarch64-apple-darwin20      |
 |arch           |aarch64                     |
 |os             |darwin20                    |
