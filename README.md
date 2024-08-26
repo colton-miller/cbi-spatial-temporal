@@ -31,7 +31,8 @@ cd cbi-spatial-temporal
 ### R Dependencies
 To ensure compatibility, the following R packages and versions were used:
 
-platform       aarch64-apple-darwin20      
+R version:
+platform/taarch64-apple-darwin20      
 arch           aarch64                     
 os             darwin20                    
 system         aarch64, darwin20           
@@ -46,6 +47,7 @@ language       R
 version.string R version 4.4.0 (2024-04-24)
 nickname       Puppy Cup 
 
+Packages:
 - **forcats**: 1.0.0
 - **dplyr**: 1.1.4
 - **this.path**: 2.4.0
