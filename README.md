@@ -1,4 +1,4 @@
-# cbi-spatial-temporal
+# Spatial alignment and temporal synchrony between field observations and remotely sensed data in empirical studies of burn severity using the Composite Burn Index
 
 ## Overview
 These data and scripts produce the analysis and visualizations that accompany the paper submitted as:
