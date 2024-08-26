@@ -67,6 +67,6 @@ install.packages(c("forcats", "dplyr", "this.path", "readxl", "ggpubr", "ggplot2
 ## Running the Project
 To run the analysis, open the `/scripts/comparison_results.R` file in RStudio and execute it.
 
-The outputs generated will be saved to the `/plots` directory, which is not tracked by the repository. 
+The outputs generated will be saved to the `/plots` directory, the contents of which is not tracked by the repository. 
 
 Scripts to produce individual figures can be found in the `/scripts` directory according to their respective caption in the manuscript. 
