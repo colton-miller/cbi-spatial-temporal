@@ -1,10 +1,31 @@
 # cbi-spatial-temporal
 
 ## Overview
-A brief description of what your project does.
+These data and scripts produce the analysis and visualizations that accompany the paper submitted as:
+
+Spatial alignment and temporal synchrony between field observations and remotely sensed data in empirical studies of burn severity using the Composite Burn Index
+
+Colton W. Miller, Brian J. Harvey, Van R. Kane, Ernesto Alvarado, and L. Monika Moskal
+
+International Journal of Wildland Fire
 
 ## Installation
-Instructions for setting up the environment and installing dependencies.
+
+## System Requirements
+- Operating System: Windows, macOS, or Linux
+- R version: 4.0.4 or higher
+- RStudio (optional, but recommended)
+
+## Clone the Repository
+First, clone the repository to your local machine using Git:
+
+git clone https://github.com/colton-miller/cbi-spatial-temporal.git
+cd cbi-spatial-temporal
+
+## Install R and RStudio
+- Download and install R from [CRAN](https://cran.r-project.org/).
+- (Optional) Install RStudio from [RStudio's website](https://www.rstudio.com/products/rstudio/download/).
+
 
 ### R Dependencies
 To ensure compatibility, the following R packages and versions were used:
@@ -36,3 +57,7 @@ To install the required R packages, run:
 ```r
 # R
 install.packages(c("forcats", "dplyr", "this.path", "readxl", "ggpubr", "ggplot2"))
+```
+
+## Running the Project
+To run the analysis, open the `/scripts/comparison_results.R` file in RStudio and execute it.
