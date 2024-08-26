@@ -32,7 +32,7 @@ cd cbi-spatial-temporal
 To ensure compatibility, the following R packages and versions were used:
 
 R version:
----------------------------------------------
+______________________________________________
 |platform       |aarch64-apple-darwin20      |
 |arch           |aarch64                     |
 |os             |darwin20                    |
@@ -47,7 +47,7 @@ R version:
 |language       |R                           |
 |version.string |R version 4.4.0 (2024-04-24)|
 |nickname       |Puppy Cup                   |
----------------------------------------------
+______________________________________________
 
 Packages:
 - **forcats**: 1.0.0
