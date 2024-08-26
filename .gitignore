@@ -1,0 +1,5 @@
+# Ignore everything in the plots folder
+plots/*
+
+# But do not ignore the plots folder itself
+!plots/
