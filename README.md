@@ -29,7 +29,7 @@ cd cbi-spatial-temporal
 
 
 ### R Dependencies
-To ensure compatibility, the following R packages and versions were used:
+To ensure compatibility, the following R version and packages were used:
 
 R version:
 |platform       |aarch64-apple-darwin20      |
