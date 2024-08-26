@@ -62,4 +62,5 @@ install.packages(c("forcats", "dplyr", "this.path", "readxl", "ggpubr", "ggplot2
 
 ## Running the Project
 To run the analysis, open the `/scripts/comparison_results.R` file in RStudio and execute it.
+
 Scripts to produce individual figures can be found in the `/scripts` directory according to their respective caption in the manuscript. 
