@@ -32,15 +32,16 @@ new_height <- original_height * scaling_factor
 
 # read in data
 script_path <- this.path()
-script_dir <- dirname(script_path)
+repo_dir <- dirname(script_path) |> dirname()
 comparisons <- read_xlsx(
   file.path(
-    dirname(script_dir), 
-    "data/comparisons_results_20240825.xlsx"
+    repo_dir,
+    "data", 
+    "comparisons_results_20240825.xlsx"
     )
   )
 
-setwd(data_dir) # folder to save outputs named "plots" in this directory
+setwd(repo_dir) # folder to save outputs named "plots" in this directory
 
 
 ##### Data Preprocessing #####
