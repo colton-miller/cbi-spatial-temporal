@@ -9,12 +9,13 @@ Colton W. Miller, Brian J. Harvey, Van R. Kane, Ernesto Alvarado, and L. Monika 
 
 International Journal of Wildland Fire
 
-## Installation
-
 ## System Requirements
 - Operating System: Windows, macOS, or Linux
 - R version: 4.0.4 or higher
 - RStudio (optional, but recommended)
+
+## Installation
+The following sections provide detail on how to download and run the scripts needed to produce the tables and visuals included in the publication. 
 
 ## Clone the Repository
 First, clone the repository to your local machine using Git:
