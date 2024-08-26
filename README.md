@@ -32,6 +32,7 @@ cd cbi-spatial-temporal
 To ensure compatibility, the following R packages and versions were used:
 
 R version:
+|               |                            |
 |---------------|----------------------------|
 |platform       |aarch64-apple-darwin20      |
 |arch           |aarch64                     |
@@ -49,6 +50,12 @@ R version:
 |nickname       |Puppy Cup                   |
 |---------------|----------------------------|
 
+
+| Column 1 Header | Column 2 Header | Column 3 Header |
+|-----------------|-----------------|-----------------|
+| Row 1 Column 1  | Row 1 Column 2  | Row 1 Column 3  |
+| Row 2 Column 1  | Row 2 Column 2  | Row 2 Column 3  |
+| Row 3 Column 1  | Row 3 Column 2  | Row 3 Column 3  |
 
 Packages:
 - **forcats**: 1.0.0
