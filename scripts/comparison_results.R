@@ -33,11 +33,10 @@ new_height <- original_height * scaling_factor
 # read in data
 script_path <- this.path()
 script_dir <- dirname(script_path)
-data_dir <- "/Users/cwm/Dropbox/Mac/Desktop/Publishing/IJWF_submission_CBI2"
 comparisons <- read_xlsx(
   file.path(
-    data_dir, 
-    "analysis/comparisons_results_20240825_citations.xlsx"
+    dirname(script_dir), 
+    "data/comparisons_results_20240825.xlsx"
     )
   )
 
