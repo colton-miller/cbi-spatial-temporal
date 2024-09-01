@@ -320,7 +320,7 @@ sync_size_square$square_asi_abs = abs(sync_size_square$square_asi)
 ##### Analysis #####
 
 # table outputs
-source(file.path(script_dir, "tables.R"))
+source(file.path(repo_dir, "scripts", "tables.R"))
 write.csv(
   circ_square_studies, 
   file = "plots/circ_square_plots_citations.csv", 
@@ -350,7 +350,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
   )
-source(file.path(script_dir, "fig2_plots.R"))
+source(file.path(repo_dir, "scripts", "fig2_plots.R"))
 dev.off()
 
 # circular field plots spatial synchrony
@@ -361,7 +361,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
   )
-source(file.path(script_dir, "fig3_plots.R"))
+source(file.path(repo_dir, "scripts", "fig3_plots.R"))
 dev.off()
 
 # square field plots spatial synchrony
@@ -372,7 +372,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
   )
-source(file.path(script_dir, "fig4_plots.R"))
+source(file.path(repo_dir, "scripts", "fig4_plots.R"))
 dev.off()
 
 # ASI boxplots
@@ -384,7 +384,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
   )
-source(file.path(script_dir, "fig5_plots.R"))
+source(file.path(repo_dir, "scripts", "fig5_plots.R"))
 ggarrange(
   annotate_figure(
     plot_a, 
@@ -414,7 +414,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
   )
-source(file.path(script_dir, "fig6_plots.R"))
+source(file.path(repo_dir, "scripts", "fig6_plots.R"))
 dev.off()
 
 
