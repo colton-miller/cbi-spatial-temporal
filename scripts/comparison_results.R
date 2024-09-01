@@ -417,4 +417,16 @@ png(
 source(file.path(repo_dir, "scripts", "fig6_plots.R"))
 dev.off()
 
+write.csv(
+  plot_delay_after_fire,
+  file = "plots/imagery_delay_after_plots.csv",
+  row.names = FALSE
+  )
+
+write.csv(
+  imagery_delay_after_plots,
+  file = "plots/imagery_delay_after_plots.csv",
+  row.names = FALSE
+)
+
 
