@@ -2,7 +2,6 @@
 library(ggplot2)
 library(ggpubr)
 library(grid)
-library(readxl)
 library(this.path)
 
 
@@ -33,11 +32,11 @@ new_height <- original_height * scaling_factor
 # read in data
 script_path <- this.path()
 repo_dir <- dirname(script_path) |> dirname()
-comparisons <- read_xlsx(
+comparisons <- read.csv(
   file.path(
     repo_dir,
     "data", 
-    "comparisons_results_20240825.xlsx"
+    "comparisons_results.csv"
     )
   )
 
