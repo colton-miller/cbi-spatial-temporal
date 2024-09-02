@@ -8,3 +8,4 @@ logs/
 plots/*
 !plots/
 .Rhistory
+.DS_Store
