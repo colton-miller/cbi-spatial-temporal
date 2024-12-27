@@ -1,0 +1,11 @@
+"method","circular","square"
+"area weighted",7,1
+"bilinear",34,12
+"focal mean",31,4
+"mean of sample points within 
+      plot",32,1
+"mean of values of pixels within 
+      distance of plot",5,0
+"none",24,5
+"Not specified",52,20
+"object-based",0,0

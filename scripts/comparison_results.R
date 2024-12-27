@@ -56,7 +56,10 @@ fields_to_keep <- c("Citation",
                     "Plots_month_avg", 
                     "Plots_year",
                     "Postfire_month_avg", 
-                    "Postfire_year"
+                    "Postfire_year",
+                    "Highest_model",
+                    "Model_metric",
+                    "Model_notes"
                     )
 
 sync <- comparisons[, fields_to_keep]
@@ -78,6 +81,7 @@ sync <- sync[
     sync$Postfire_year, 
     sync$Postfire_month
     ), 
+  
   ]
 
 
@@ -94,7 +98,10 @@ sync_fire_plot <- sync[, c(
   "Fire_start_month",
   "Fire_start_year",
   "Plots_month",
-  "Plots_year"
+  "Plots_year",
+  "Highest_model",
+  "Model_metric",
+  "Model_notes"
   )
   ]
 
@@ -104,7 +111,10 @@ sync_plot_imagery <- sync[, c(
   "Plots_month",
   "Plots_year",
   "Postfire_month",
-  "Postfire_year"
+  "Postfire_year",
+  "Highest_model",
+  "Model_metric",
+  "Model_notes"
   )
   ]
 
@@ -114,7 +124,10 @@ sync_fire_imagery <- sync[, c(
   "Fire_start_month",
   "Fire_start_year",
   "Postfire_month",
-  "Postfire_year"
+  "Postfire_year",
+  "Highest_model",
+  "Model_metric",
+  "Model_notes"
   )
   ]
 
@@ -171,7 +184,10 @@ sync_size <- comparisons[, c(
   "Post_sqm",
   "Smoothing",
   "Plot_shape",
-  "Postfire_image"
+  "Postfire_image",
+  "Highest_model",
+  "Model_metric",
+  "Model_notes"
   )
   ]
 
@@ -316,28 +332,37 @@ sync_size_square$square_asi_abs = abs(sync_size_square$square_asi)
 
 
 
+
+
+
 ##### Analysis #####
+
+# data sets used in each analysis:
+# fig3_plots: sync_size
+# fig4_plots: sync_size
+# fig5_plots: sync_size, sync_size_circular, sync_size_square
+# fig6_plots: sync_fire_plot, sync_plot_imagery
 
 # table outputs
 source(file.path(repo_dir, "scripts", "tables.R"))
 write.csv(
   circ_square_studies, 
-  file = "plots/circ_square_plots_citations.csv", 
+  file = "tables/circ_square_plots_citations.csv", 
   row.names = FALSE
   )
 write.csv(
   circ_square_comparisons, 
-  file = "plots/circ_square_plots_comparisons.csv", 
+  file = "tables/circ_square_plots_comparisons.csv", 
   row.names = FALSE
   )
 write.csv(
   smoothing_type_by_shape_both, 
-  file = "plots/smoothing_type_by_shape.csv", 
+  file = "tables/smoothing_type_by_shape.csv", 
   row.names = FALSE
   )
 write.csv(
   image_type_by_shape, 
-  file = "plots/image_type_by_shape.csv", 
+  file = "tables/image_type_by_shape.csv", 
   row.names = TRUE
   )
 
@@ -427,5 +452,40 @@ write.csv(
   file = "plots/imagery_delay_after_plots.csv",
   row.names = FALSE
 )
+
+# plots of synchrony and alingment vs. R2
+plot_dims <- calc_plot_dims(w = 800, h = 800, orig_res = 72, target_res = 300)
+png(
+  filename = "plots/MillerFig7.png", 
+  width = plot_dims$w, 
+  height = plot_dims$h, 
+  res = plot_dims$r
+)
+source(file.path(repo_dir, "scripts", "fig7_plots.R"))
+dev.off()
+
+write.csv(
+  sync_size_circular_summary_table,
+  file = "tables/sync_size_circular_summary_table.csv",
+  row.names = FALSE
+)
+write.csv(
+  sync_size_square_summary_table,
+  file = "tables/sync_size_square_summary_table.csv",
+  row.names = FALSE
+)
+
+write.csv(
+  sync_temp_plot_fire_summary_table,
+  file = "tables/sync_temp_plot_fire_summary_table.csv",
+  row.names = FALSE
+)
+write.csv(
+  sync_temp_rs_plot_summary_table,
+  file = "tables/sync_temp_rs_plot_summary_table.csv",
+  row.names = FALSE
+)
+
+
 
 
