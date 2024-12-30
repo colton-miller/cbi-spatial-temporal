@@ -59,7 +59,8 @@ fields_to_keep <- c("Citation",
                     "Postfire_year",
                     "Highest_model",
                     "Model_metric",
-                    "Model_notes"
+                    "Model_notes",
+                    "Comparison_idx"
                     )
 
 sync <- comparisons[, fields_to_keep]
@@ -101,7 +102,8 @@ sync_fire_plot <- sync[, c(
   "Plots_year",
   "Highest_model",
   "Model_metric",
-  "Model_notes"
+  "Model_notes",
+  "Comparison_idx"
   )
   ]
 
@@ -114,7 +116,8 @@ sync_plot_imagery <- sync[, c(
   "Postfire_year",
   "Highest_model",
   "Model_metric",
-  "Model_notes"
+  "Model_notes",
+  "Comparison_idx"
   )
   ]
 
@@ -127,7 +130,8 @@ sync_fire_imagery <- sync[, c(
   "Postfire_year",
   "Highest_model",
   "Model_metric",
-  "Model_notes"
+  "Model_notes",
+  "Comparison_idx"
   )
   ]
 
@@ -187,7 +191,8 @@ sync_size <- comparisons[, c(
   "Postfire_image",
   "Highest_model",
   "Model_metric",
-  "Model_notes"
+  "Model_notes",
+  "Comparison_idx"
   )
   ]
 
@@ -342,6 +347,7 @@ sync_size_square$square_asi_abs = abs(sync_size_square$square_asi)
 # fig4_plots: sync_size
 # fig5_plots: sync_size, sync_size_circular, sync_size_square
 # fig6_plots: sync_fire_plot, sync_plot_imagery
+# fig7_plots: sinc_size_circular, sync_size_square, sync_fire_plot, sync_plot_imagery
 
 # table outputs
 source(file.path(repo_dir, "scripts", "tables.R"))

@@ -21,11 +21,13 @@ clean_R2_metrics <- function(sync_df, labels_to_drop, metrics_to_square, synchro
     sync_df_clean[sync_df_clean$Model_metric %in% metrics_to_square, ]$metric_value ^ 2
   
   # Step 4: Get indices of rows with "lumped" comparisons
-  lumped_idx <- grep("Lumped|lumped", sync_df_clean[, "Model_notes"])
+  comparison_freq <- as.data.frame(table(sync_df_clean$Comparison_idx))
+  lumped_idx <- comparison_freq[comparison_freq$Freq > 1, ]$Var1
+  lumped_idx <- as.numeric(as.character(lumped_idx))
   
   # Step 5: Define objects for unlumped and lumped comparisons
-  unlumped_fires <- sync_df_clean[-lumped_idx, ]
-  lumped_fires <- sync_df_clean[lumped_idx, ]
+  lumped_fires <- sync_df_clean[sync_df_clean$Comparison_idx %in% lumped_idx, ]
+  unlumped_fires <- sync_df_clean[!(sync_df_clean$Comparison_idx %in% lumped_idx), ]
   
   # Step 6: Get names of unique citations in lumped comparisons
   unique_lumped_studies <- unique(lumped_fires$Citation)
@@ -40,13 +42,13 @@ clean_R2_metrics <- function(sync_df, labels_to_drop, metrics_to_square, synchro
     # Get the subset of observations for this study
     study <- unique_lumped_studies[i]
     obs <- lumped_fires[lumped_fires$Citation == study, ]
-    unique_notes <- unique(obs$Model_notes)
+    unique_idx <- unique(obs$Comparison_idx)
     
-    # Loop over each unique note within the study
-    for (j in seq_along(unique_notes)) {
+    # Loop over each unique idx within the study
+    for (j in seq_along(unique_idx)) {
       
-      note <- unique_notes[j]
-      obs_lumped <- obs[obs$Model_notes == note, ]
+      idx <- unique_idx[j]
+      obs_lumped <- obs[obs$Comparison_idx == idx, ]
       
       # Check for consistency based on synchrony type
       if (synchrony_type == "spatial") {
@@ -67,13 +69,15 @@ clean_R2_metrics <- function(sync_df, labels_to_drop, metrics_to_square, synchro
       # Step 9: Store comparisons based on synchrony consistency
       if (consistent) {
         # If synchrony is consistent, keep only one row and add 'n_fires' column
-        comparison <- cbind(obs_lumped[1, ], n_fires = nrow(obs_lumped))
+        comparison <- cbind(
+          obs_lumped[1, ], 
+          n_fires = nrow(obs_lumped)
+          )
         lumped_comparisons_same <- rbind(lumped_comparisons_same, comparison)
       } else {
         # If synchrony is inconsistent, add all rows to the "diff" object
         # Add index to track unique instances of asynchronous or unaligned 
         # comparisons
-        obs_lumped$lumped_inconsistent <- paste0(i, j)
         lumped_comparisons_diff <- rbind(lumped_comparisons_diff, obs_lumped)
         
       }
@@ -81,7 +85,10 @@ clean_R2_metrics <- function(sync_df, labels_to_drop, metrics_to_square, synchro
   }
   
   # Step 10: Add 'n_fires' column to the unlumped comparisons and combine with "same" comparisons
-  unlumped_fires <- cbind(unlumped_fires, n_fires = 1)
+  unlumped_fires <- cbind(
+    unlumped_fires, 
+    n_fires = 1
+    )
   comparisons_same <- rbind(lumped_comparisons_same, unlumped_fires)
   
   # Step 11: Return the processed data as a list
