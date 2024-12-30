@@ -192,6 +192,7 @@ legend(
   col = c("black", "red"), 
   pt.bg = "#3E4EAC",
   pt.cex = 3,
+  lwd = 1.5,
   y.intersp = 1.5,
   x.intersp = 1,
   title = "Metric",
@@ -318,6 +319,7 @@ for (i in seq_along(sync_size_circular_inconsistent_indices)) {
   
   sync_size_circular_results[[i]] <- list(
     citation = citation, 
+    comparison_idx = sync_size_circular_inconsistent_indices[i],
     plot_sizes = plot_sizes, 
     pixel_sizes = pixel_sizes, 
     diff_plot_sizes = diff_plot_sizes, 
@@ -338,6 +340,7 @@ for (i in seq_along(sync_size_square_inconsistent_indices)) {
   
   sync_size_square_results[[i]] <- list(
     citation = citation, 
+    comparison_idx = sync_size_square_inconsistent_indices[i],
     plot_sizes = plot_sizes, 
     pixel_sizes = pixel_sizes, 
     diff_plot_sizes = diff_plot_sizes, 
@@ -359,6 +362,7 @@ for (i in seq_along(sync_temp_plot_fire_inconsistent_indices)) {
   
   sync_temp_plot_fire_results[[i]] <- list(
     citation = citation, 
+    comparison_idx = sync_temp_plot_fire_inconsistent_indices[i],
     plot_months = plot_months, 
     fire_months = fire_months, 
     diff_plot_months = diff_plot_months, 
@@ -381,6 +385,7 @@ for (i in seq_along(sync_temp_rs_plot_inconsistent_indices)) {
   
   sync_temp_rs_plot_results[[i]] <- list(
     citation = citation, 
+    comparison_idx = sync_temp_rs_plot_inconsistent_indices[i],
     imagery_months = imagery_months, 
     plot_months = plot_months, 
     diff_imagery_months = diff_imagery_months, 
@@ -423,8 +428,7 @@ if (length(sync_size_circular_results) > 0) {
     sd_pixel_size = round(sapply(sync_size_circular_results, function(x) sd(x$pixel_sizes)), 1)
     )
   sync_size_circular_summary_table$cv_pixel_size <- round(sync_size_circular_summary_table$sd_pixel_size / sync_size_circular_summary_table$mean_pixel_size * 100, 1)
-  
-  
+  sync_size_circular_summary_table$comparison_idx <- sapply(sync_size_circular_results, function(x) x$comparison_idx)
 }
 
 if (length(sync_size_square_results) > 0) {
@@ -457,7 +461,7 @@ if (length(sync_size_square_results) > 0) {
     sd_pixel_size = round(sapply(sync_size_square_results, function(x) sd(x$pixel_sizes)), 1)
   )
   sync_size_square_summary_table$cv_pixel_size <- round(sync_size_square_summary_table$sd_pixel_size / sync_size_square_summary_table$mean_pixel_size * 100, 1)
-  
+  sync_size_square_summary_table$comparison_idx <- sapply(sync_size_square_results, function(x) x$comparison_idx)
 }
 
 
@@ -499,7 +503,7 @@ if (length(sync_temp_plot_fire_results) > 0) {
     sd_delay = round(sapply(sync_temp_plot_fire_results, function(x) sd(x$delay)), 1)
   )
   sync_temp_plot_fire_summary_table$cv_delay <- round(sync_temp_plot_fire_summary_table$sd_delay / sync_temp_plot_fire_summary_table$mean_delay * 100, 1)
-  
+  sync_temp_plot_fire_summary_table$comparison_idx <- sapply(sync_temp_plot_fire_results, function(x) x$comparison_idx)
 }
 
 
@@ -541,7 +545,7 @@ if (length(sync_temp_rs_plot_results) > 0) {
     sd_delay = round(sapply(sync_temp_rs_plot_results, function(x) sd(x$delay)), 1)
   )
   sync_temp_rs_plot_summary_table$cv_delay <- round(sync_temp_rs_plot_summary_table$sd_delay / sync_temp_rs_plot_summary_table$mean_delay * 100, 1)
-  
+  sync_temp_rs_plot_summary_table$comparison_idx <- sapply(sync_temp_rs_plot_results, function(x) x$comparison_idx)
 }
 
 
