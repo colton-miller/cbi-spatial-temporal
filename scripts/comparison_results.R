@@ -437,7 +437,7 @@ ggarrange(
 dev.off()
 
 # temporal synchrony plots
-plot_dims <- calc_plot_dims(w = 900, h = 900, orig_res = 72, target_res = 300)
+plot_dims <- calc_plot_dims(w = 1100, h = 1100, orig_res = 72, target_res = 300)
 png(
   filename = "plots/MillerFig6.png", 
   width = plot_dims$w, 
