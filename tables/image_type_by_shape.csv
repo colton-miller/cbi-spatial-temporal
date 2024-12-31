@@ -3,7 +3,6 @@
 "AVIRIS",1,0,2
 "Deimos 1 SLIM-6-22",0,0,1
 "MASTER",0,2,2
-"MTBS/RAVG",8,0,0
 "PALSAR",16,0,0
 "Sentinel 2 MSI",0,0,1
 "Sentinel 2A",0,0,1
@@ -14,4 +13,4 @@
 "UAV",1,0,0
 "WV-2",0,0,1
 "WV-3",1,0,0
-"All Landsat",165,1,40
+"All Landsat",163,1,40

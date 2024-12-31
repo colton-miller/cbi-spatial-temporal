@@ -137,6 +137,7 @@ color_palette <- colorRampPalette(c("lightblue", "darkblue"))
 combined_df$color <- color_palette(100)[
   as.integer(pmin(pmax(combined_df$metric_value, 0), 1) * 99) + 1
 ]
+combined_df$color <- adjustcolor(combined_df$color, alpha.f = 0.5)
 
 # Define color of point outline based on whether metric is R2 or R2adj
 combined_df$outline <- "black"
@@ -165,7 +166,7 @@ scatterplot3d(
   cex.symbols = combined_df$n_fires,
   font.lab = 2,
   box = FALSE,
-  angle = 45,
+  angle = 40,
   mar = c(4, 4, 0, 2),
   cex.axis = 1.25,
   cex.lab = 1.25,
@@ -301,6 +302,177 @@ png(
 grid.raster(plot3d)
 grid.raster(cropped_img, x = 0.925, y = 0.8025, width = desired_width, height = desired_height)
 dev.off()
+
+
+# 2D plot
+
+# # Define the layout matrix and relative widths
+# layout_matrix <- matrix(c(1, 2, 3, 4), nrow = 1, byrow = TRUE)
+# 
+# # Set the layout with specified relative widths and heights
+# layout(layout_matrix, widths = c(4, 4, 4, 1.5), heights = c(1, 1))
+# 
+# # Add margins to the plots for clarity
+# par(mar = c(4, 5, 5, 0), xpd = TRUE)
+
+plot_dims <- calc_plot_dims(w = 1200, h = 400, orig_res = 72, target_res = 300)
+png(
+  filename = "/Users/cwm/Desktop/r2_performance_2d.png",
+  width = plot_dims$w,
+  height = plot_dims$h,
+  res = plot_dims$r
+)
+par(mfrow = c(1, 3), mar = c(4, 5, 5, 0), oma = c(0, 0, 0, 12), xpd = NA)
+
+plot(
+  NA,
+  las = 1,
+  xlab = "|Assumption Strength Index (ASI)|",
+  ylab = expression(bold(R^2)),
+  ylim = c(0, 1),
+  xlim = c(0, 100),
+  font.lab = 2,
+  bty = "n",
+  cex.lab = 1.5,
+  cex.axis = 1.5
+)
+segments(
+  x0 = 0, 
+  y0 = 0, 
+  x1 = 0, 
+  y1 = 1, 
+  lty = 2
+)
+
+points(
+  x = combined_df$asi_abs, 
+  y = combined_df$metric_value,
+  pch = 21,
+  cex = combined_df$n_fires,
+  col = combined_df$outline,
+  bg = rgb(0, 0, 0, 0.5),
+)
+mtext(
+  text = paste0("a) Spatial alignment \n N = ", nrow(combined_df)),
+  side = 3,
+  line = 0,
+  adj = 0,
+  font = 2
+)
+
+
+
+delay_min <- min(combined_df$Plots_month.x - combined_df$Fire_start_month)
+delay_max <- max(combined_df$Plots_month.x - combined_df$Fire_start_month)
+
+plot(
+  NA, 
+  las = 1,
+  xlab = "Field plots month - fire start month",
+  ylab = expression(bold(R^2)),
+  ylim = c(0, 1),
+  xlim = c(delay_min - 1, delay_max + 1),
+  font.lab = 2,
+  bty = "n",
+  cex.lab = 1.5,
+  cex.axis = 1.5
+)
+segments(
+  x0 = 0, 
+  y0 = 0, 
+  x1 = 0, 
+  y1 = 1, 
+  lty = 2
+)
+
+points(
+  x = combined_df$Plots_month.x - combined_df$Fire_start_month, 
+  y = combined_df$metric_value,
+  pch = 21,
+  cex = combined_df$n_fires,
+  col = combined_df$outline,
+  bg = rgb(0, 0, 0, 0.5),
+)
+mtext(
+  text = paste0("b) Temporal synchrony: \n Delay between field plots and fire igntion \n N = ", nrow(combined_df)),
+  side = 3,
+  line = -1,
+  adj = 0,
+  font = 2
+)
+
+
+delay_min <- min(combined_df$Postfire_month - combined_df$Plots_month.x)
+delay_max <- max(combined_df$Postfire_month - combined_df$Plots_month.x)
+
+plot(
+  NA, 
+  las = 1,
+  xlab = "Remotely sensed data month - field plots month",
+  ylab = expression(bold(R^2)),
+  ylim = c(0, 1),
+  xlim = c(delay_min - 1, delay_max + 1),
+  font.lab = 2,
+  bty = "n",
+  cex.lab = 1.5,
+  cex.axis = 1.5
+)
+segments(
+  x0 = 0, 
+  y0 = 0, 
+  x1 = 0, 
+  y1 = 1, 
+  lty = 2
+  )
+
+points(
+  x = combined_df$Postfire_month - combined_df$Plots_month.x, 
+  y = combined_df$metric_value,
+  pch = 21,
+  cex = combined_df$n_fires,
+  col = combined_df$outline,
+  bg = rgb(0, 0, 0, 0.5),
+)
+mtext(
+  text = paste0("c) Temporal synchrony: \n Delay between remotely sensed data and field plots \n N = ", nrow(combined_df)),
+  side = 3,
+  line = -1,
+  adj = 0,
+  font = 2,
+)
+
+# par(mar = c(0, 2, 6, 0), xpd = TRUE)
+# plot(1, type = "n", axes = FALSE, xlab = "", ylab = "", main = "", ann = FALSE)
+legend(
+  # x = 0.5, y = 1.4,
+  x = 65, y = 0.9,
+  legend = c("1", "3", "5"),
+  pch = 21,
+  col = "black",
+  pt.bg = rgb(0, 0, 0, 0.5), 
+  pt.cex = c(1, 3, 5, 10, 16),
+  title = "Number of fires\nin comparison",
+  y.intersp = c(0.75, 1, 1.5),
+  x.intersp = c(0.75, 1.25, 1.5),
+  bty = "n",
+  cex = 1.5
+)
+legend(
+  x = 65, y = 0.6,
+  legend = c(expression(R^2), expression(R[adj]^2)),
+  pch = 21,
+  col = c("black","red"),
+  pt.bg = rgb(0, 0, 0, 0.5),
+  pt.cex = c(5),
+  title = "Performance \nmetric",
+  y.intersp = 1.2, 
+  bty = "n",
+  cex = 1.5
+)
+
+dev.off()
+
+###
 
 
 

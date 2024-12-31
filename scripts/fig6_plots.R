@@ -302,7 +302,7 @@ mtext(
 )
 
 mtext(
-  text = paste("      N = ", nrow(sync_fire_imagery)), 
+  text = paste("      N = ", nrow(sync_plot_imagery)), 
   side = 3, 
   font = 2, 
   adj = 0, 
@@ -379,7 +379,7 @@ mtext(
 )
 
 mtext(
-  text = paste("      N = ", nrow(sync_fire_imagery)), 
+  text = paste("      N = ", nrow(sync_plot_imagery)), 
   side = 3, 
   font = 2, 
   adj = 0, 

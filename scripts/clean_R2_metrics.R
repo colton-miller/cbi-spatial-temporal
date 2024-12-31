@@ -57,14 +57,13 @@ clean_R2_metrics <- function(sync_df, labels_to_drop, metrics_to_square, synchro
         consistent <- plot_size == image_size
       }
       
-      ## TODO: Ok if delay is < 2 months??
       if (synchrony_type == "temporal_rs_plot") {
-        delay <- length(unique(obs_lumped$Postfire_month - obs_lumped$Plots_month))
-        consistent <- delay == 1
+        delay <- obs_lumped$Postfire_month - obs_lumped$Plots_month
+        consistent <- max(delay) - min(delay) <= 2
       }
       if (synchrony_type == "temporal_plot_fire") {
-        delay <- length(unique(obs_lumped$Plots_month - obs_lumped$Fire_start_month))
-        consistent <- delay == 1
+        delay <- obs_lumped$Plots_month - obs_lumped$Fire_start_month
+        consistent <- max(delay) - min(delay) <= 2
       }
       
       # Step 9: Store comparisons based on synchrony consistency

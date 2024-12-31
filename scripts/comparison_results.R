@@ -475,11 +475,13 @@ write.csv(
   file = "tables/sync_size_circular_summary_table.csv",
   row.names = FALSE
 )
-write.csv(
+if (exists("sync_size_square_summary_table")) {
+  write.csv(
   sync_size_square_summary_table,
   file = "tables/sync_size_square_summary_table.csv",
   row.names = FALSE
-)
+  )
+}
 
 write.csv(
   sync_temp_plot_fire_summary_table,
