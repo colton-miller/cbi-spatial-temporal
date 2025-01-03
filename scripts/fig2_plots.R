@@ -90,7 +90,7 @@ text(
 
 text(
   x = 8100, 
-  y = 7600, 
+  y = 7200, 
   labels = "Spatial alignment", 
   font = 2, 
   cex = 1.5

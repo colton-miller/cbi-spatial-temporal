@@ -100,7 +100,7 @@ axis(
 )
 
 mtext(
-  text = "Fire start timing (month)", 
+  text = "Fire start timing (year)", 
   side = 1, 
   line = 4, 
   font = 2, 
@@ -108,7 +108,7 @@ mtext(
 )
 
 mtext(
-  text = "Field plot timing (month)", 
+  text = "Field plot timing (year)", 
   side = 2, 
   line = 4, 
   font = 2, 
@@ -262,7 +262,7 @@ axis(
 
 
 mtext(
-  text = "Field plot timing (month)", 
+  text = "Field plot timing (year)", 
   side = 1, 
   line = 4, 
   font = 2, 
@@ -270,7 +270,7 @@ mtext(
 )
 
 mtext(
-  text = "Remotely sensed data timing (month)", 
+  text = "Remotely sensed data timing (year)", 
   side = 2, 
   line = 4, 
   font = 2, 
@@ -302,7 +302,7 @@ mtext(
 )
 
 mtext(
-  text = paste("      N = ", nrow(sync_fire_imagery)), 
+  text = paste("      N = ", nrow(sync_plot_imagery)), 
   side = 3, 
   font = 2, 
   adj = 0, 
@@ -327,17 +327,29 @@ hist(
   ylab = "", 
   las = 2, 
   xaxt = "n", 
-  xlim = c(rs_delay_range[1], rs_delay_range[2]), 
+  xlim = c(rs_delay_range[1] - 4, rs_delay_range[2]), 
   cex = 1.25, 
   cex.axis = 1.25
 )
 
+
+# Generate the sequence
+seq_values <- seq(rs_delay_range[1] - 4, rs_delay_range[2], 8)
+
+# Interleave with empty scalar ""
+interleaved <- c(rbind(seq_values, rep("", length(seq_values) - 1)))
+
+# Convert the interleaved result to a character vector
+interleaved <- as.character(interleaved)
+
+
 axis(
   side = 1, 
-  at = seq(rs_delay_range[1],rs_delay_range[2], 8), 
-  labels = seq(rs_delay_range[1], rs_delay_range[2], 8), 
+  at = seq(rs_delay_range[1] - 4,rs_delay_range[2], 4), 
+  labels = interleaved[-length(interleaved)], 
   cex.axis = 0.9, 
-  cex.axis = 1.25
+  cex.axis = 1.25,
+  las = 1
 )
 
 mtext(
@@ -367,7 +379,7 @@ mtext(
 )
 
 mtext(
-  text = paste("      N = ", nrow(sync_fire_imagery)), 
+  text = paste("      N = ", nrow(sync_plot_imagery)), 
   side = 3, 
   font = 2, 
   adj = 0, 
