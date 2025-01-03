@@ -3,10 +3,6 @@ library(forcats)
 
 # ASI boxplots by plot shape
 
-summary(sync_size$circ_asi)
-summary(sync_size$square_asi)
-
-
 smoothing_order = c("Not specified","focal mean", "none",
                     "mean of sample points within \n      plot", "bilinear","area weighted",
                     "mean of values of pixels within \n      distance of plot",

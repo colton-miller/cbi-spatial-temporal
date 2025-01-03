@@ -303,13 +303,13 @@ sync_size$square_asi <-
 sync_size[sync_size$Plot_shape == "Circular", ]$square_asi = NA
 
 # create subset dataframes for each plot shape
-sync_size_circular = sync_size[sync_size$Plot_shape == "Circular",  ]
-sync_size_square = sync_size[sync_size$Plot_shape == "Square",  ]
+sync_size_circular <- sync_size[sync_size$Plot_shape == "Circular",  ]
+sync_size_square <- sync_size[sync_size$Plot_shape == "Square",  ]
 
 # calculate sign of asi (tells what assumption is made)
-sync_size_circular$sign = sign(sync_size_circular$circ_asi)
-sync_size_circular$sign = as.factor(sync_size_circular$sign)
-sync_size_circular$sign = factor(
+sync_size_circular$sign <- sign(sync_size_circular$circ_asi)
+sync_size_circular$sign <- as.factor(sync_size_circular$sign)
+sync_size_circular$sign <- factor(
   sync_size_circular$sign, 
   levels = c("1", "0", "-1")
   )
@@ -319,9 +319,9 @@ levels(sync_size_circular$sign) = c(
   "Plot homogeneity"
   )
 
-sync_size_square$sign = sign(sync_size_square$square_asi)
-sync_size_square$sign = as.factor(sync_size_square$sign)
-sync_size_square$sign = factor(
+sync_size_square$sign <- sign(sync_size_square$square_asi)
+sync_size_square$sign <- as.factor(sync_size_square$sign)
+sync_size_square$sign <- factor(
   sync_size_square$sign, 
   levels = c("1", "0", "-1")
   )
@@ -332,8 +332,8 @@ levels(sync_size_square$sign) = c(
   )
 
 # calculate absolute value so can plot side by side
-sync_size_circular$circ_asi_abs = abs(sync_size_circular$circ_asi)
-sync_size_square$square_asi_abs = abs(sync_size_square$square_asi)
+sync_size_circular$circ_asi_abs <- abs(sync_size_circular$circ_asi)
+sync_size_square$square_asi_abs <- abs(sync_size_square$square_asi)
 
 
 
@@ -345,9 +345,9 @@ sync_size_square$square_asi_abs = abs(sync_size_square$square_asi)
 # data sets used in each analysis:
 # fig3_plots: sync_size
 # fig4_plots: sync_size
-# fig5_plots: sync_size, sync_size_circular, sync_size_square
+# fig5_plots: sync_size_circular, sync_size_square
 # fig6_plots: sync_fire_plot, sync_plot_imagery
-# fig7_plots: sinc_size_circular, sync_size_square, sync_fire_plot, sync_plot_imagery
+# fig7_plots: sync_size_circular, sync_size_square, sync_fire_plot, sync_plot_imagery
 
 # table outputs
 source(file.path(repo_dir, "scripts", "tables.R"))
