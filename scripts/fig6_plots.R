@@ -397,3 +397,5 @@ imagery_delay_after_plots <- data.frame(
   mean = round(mean(sync_plot_imagery$Postfire_month - sync_plot_imagery$Plots_month), 1),
   sd = round(sd(sync_plot_imagery$Postfire_month - sync_plot_imagery$Plots_month), 1)
 )
+
+
