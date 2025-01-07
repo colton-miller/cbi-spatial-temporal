@@ -10,3 +10,7 @@ plots/*
 .Rhistory
 .DS_Store
 .DS_Store
+
+# Ignore the intermediate data directory contents
+intermediate_data/*
+!intermediate_data/
