@@ -346,6 +346,94 @@ plot_ly(
     )
   )
 
+##
+
+plot(
+  combined_df[, c("asi_abs", "delay_rs_plots", "delay_plots_fire", "metric_value")],
+  pch = 16,
+  col = rgb(0, 0, 0, 0.5),
+  cex = sqrt(combined_df$n_fires)
+  )
+
+lm(metric_value ~ asi_abs, data = combined_df, weights = n_fires) |> summary()
+lm(metric_value ~ delay_rs_plots, data = combined_df, weights = n_fires) |> summary()
+lm(metric_value ~ delay_plots_fire, data = combined_df, weights = n_fires) |> summary()
+
+
+combined_df$Smoothing <- as.factor(combined_df$Smoothing)
+combined_df$Citation <- as.factor(combined_df$Citation)
+combined_df$Fire_name.x <- as.factor(combined_df$Fire_name.x)
+combined_df$Plot_shape <- as.factor(combined_df$Plot_shape)
+combined_df$Postfire_image <- as.factor(combined_df$Postfire_image)
+
+levels(combined_df$Smoothing)
+
+# Null model (no predictors)
+null_model <- lm(
+  metric_value ~ 1, 
+  data = combined_df, 
+  weights = n_fires
+  )
+
+# Full model (all predictors)
+full_model <- lm(
+  metric_value ~ asi_abs * Smoothing * delay_plots_fire * delay_rs_plots,
+  data = combined_df, 
+  weights = n_fires
+  )
+
+# model selection
+model_step <- step(
+  null_model, 
+  scope = list(lower = null_model, upper = full_model),
+)
+
+# Summary of the selected model
+summary(model_step)
+par(mfrow = c(2, 2))
+plot(model_step, pch = 16, col = rgb(0, 0, 0, 0.5))
+
+# discretize the delays; instead of doing it continuously
+# - decrease influece of the long delay rs-plot points
+# how to discretize; 
+# 
+
+
+hist(combined_df$delay_rs_plots, nclass = 20)
+
+# - get an envelope around the pink line, determine
+# when it crosses zero
+
+
+library(caret)
+set.seed(123)
+cv_results <- train(
+  metric_value ~ delay_rs_plots + delay_plots_fire,
+  data = combined_df,
+  method = "lm",
+  trControl = trainControl(method = "cv", number = 10)
+)
+
+print(cv_results)
+
+library(car)
+crPlots(
+  model_step, 
+  layout = c(1, 2), 
+  grid = FALSE, 
+  pch = 16, 
+  col = rgb(0, 0, 0, 0.5),
+  cex = model_step$weights
+  )  
+
+
+plot(
+  combined_df[, c("asi_abs", "metric_value")],
+  pch = 16,
+  col = rgb(0, 0, 0, 0.5),
+  cex = sqrt(combined_df$n_fires),
+  ylim = c(0, 1)
+)
 
 
 ### pairwise correlations
@@ -376,7 +464,13 @@ AIC(model, model_interaction, model_gam)
 
 # Generate effect plots
 library(effects)
-plot(allEffects(model))
+plot(allEffects(model_step))
+
+# do weighted mean
+mean(combined_df$metric_value)
+
+# -when do you start losing performance?
+# several studies out there in the tails that are pulling things down
 
 # Generates partial dependence plots
 library(car)
@@ -415,7 +509,7 @@ for (i in seq_along(variables)) {
 
 # Diagnostic plots to check model assumptions
 par(mfrow = c(2, 2))
-plot(model)
+plot(model, pch = 16, col = rgb(0, 0, 0, 0.5))
 
 
 # Plot effect of a single predictor in the GAM model
