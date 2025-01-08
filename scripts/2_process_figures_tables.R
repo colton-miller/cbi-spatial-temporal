@@ -48,7 +48,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
 )
-source(file.path(repo_dir, "scripts", "fig2_plots.R"))
+source(file.path(repo_dir, "scripts", "figures", "fig2_plots.R"))
 dev.off()
 
 ### Figure 3: Circular Field Plots Spatial Synchrony ###
@@ -59,7 +59,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
 )
-source(file.path(repo_dir, "scripts", "fig3_plots.R"))
+source(file.path(repo_dir, "scripts", "figures", "fig3_plots.R"))
 dev.off()
 
 ### Figure 4: Square Field Plots Spatial Synchrony ###
@@ -70,7 +70,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
 )
-source(file.path(repo_dir, "scripts", "fig4_plots.R"))
+source(file.path(repo_dir, "scripts", "figures", "fig4_plots.R"))
 dev.off()
 
 ### Figure 5: ASI Boxplots ###
@@ -81,7 +81,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
 )
-source(file.path(repo_dir, "scripts", "fig5_plots.R"))
+source(file.path(repo_dir, "scripts", "figures", "fig5_plots.R"))
 ggarrange(
   annotate_figure(
     plot_a, 
@@ -111,7 +111,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
 )
-source(file.path(repo_dir, "scripts", "fig6_plots.R"))
+source(file.path(repo_dir, "scripts", "figures", "fig6_plots.R"))
 dev.off()
 
 
@@ -123,7 +123,7 @@ png(
   height = plot_dims$h, 
   res = plot_dims$r
 )
-source(file.path(repo_dir, "scripts", "fig7_plots.R"))
+source(file.path(repo_dir, "scripts", "figures", "fig7_plots.R"))
 dev.off()
 
 ################################################################################
@@ -158,7 +158,7 @@ write.csv(
   row.names = FALSE
 )
 
-source(file.path(repo_dir, "scripts", "tables.R"))
+source(file.path(repo_dir, "scripts", "tables", "tables.R"))
 
 write.csv(
   n_unique_studies, 
