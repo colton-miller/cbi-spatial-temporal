@@ -11,6 +11,10 @@ plots/*
 .DS_Store
 .DS_Store
 
+# Ignore the tables directory contents
+tables/*
+!tables/
+
 # Ignore the intermediate data directory contents
 intermediate_data/*
 !intermediate_data/
