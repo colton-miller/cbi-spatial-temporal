@@ -1,26 +1,32 @@
-# figure 6 plots: 
-# a. field plot month vs fire start month, 
-# b. delay between field plots and fire ignition
-# c. RS month vs field plot month
-# d. delay between RS data and field plots
+################################################################################
+# Temporal synchrony plots
+# a) Field plot month vs. fire ignition month
+# b) Delay between field plots and fire ignition
+# c) RS month vs. field plot month
+# d) Delay between RS data and field plots
+################################################################################
 
-# function to round range of values out to nearest factor of c
+# Function to round range of values to the nearest factor of `c`
 round_to_nearest_c <- function(x, c) {
   min_val <- floor(min(x) / c) * c
   max_val <- ceiling(max(x) / c) * c
   return(c(min_val, max_val))
 }
 
-round_down_even <- function(x) {
-  floor(x / 2) * 2
-}
-
-round_up_even <- function(x) {
-  ceiling(x / 2) * 2
-}
+# Functions to round down and up to the nearest even number
+round_down_even <- function(x) {floor(x / 2) * 2}
+round_up_even <- function(x) {ceiling(x / 2) * 2}
 
 
-# get earliest and latest months observed in dataset
+################################################################################
+# Data Preparation for Plot Ranges
+################################################################################
+
+#Import the min year (first year of any type of fire/imagery/plot obs)
+min_yr <- read.csv(file.path("intermediate_data", "min_yr.csv"))
+min_yr <- min_yr$x
+
+# Get the earliest and latest months observed in the dataset
 valmin <- min(
   sync_fire_plot$Fire_start_month, 
   sync_fire_plot$Plots_month,
@@ -35,10 +41,10 @@ valmax <- max(
   sync_plot_imagery$Plots_month
   )
 
-# round months to years encompassing data
+# Round months to years encompassing the data
 val_min_max <- round_to_nearest_c(c(valmin, valmax), 12)
 
-# calculate years to use in plotting
+# Calculate years to use in plotting
 start_yr <- min_yr + val_min_max[1] / 12
 start_yr <- round_down_even(start_yr)
 
@@ -48,12 +54,15 @@ end_yr <- round_up_even(end_yr)
 month_min <- (start_yr - min_yr) * 12
 month_max <- (end_yr - min_yr) * 12
 
-# plot setup
+# Plot setup
 par(mfrow = c(2, 2), oma = c(0,0.25,0.25,0.25), mar = c(6, 5, 2, 1))
 size <- 1.25
 hist_y_max <- 150
 
-# a. plot of field plot month by fire ignition month
+
+################################################################################
+# Plot a) Field Plot Month vs Fire Ignition Month
+################################################################################
 
 plot(NA, 
      xlim = c(month_min, month_max), 
@@ -148,7 +157,10 @@ mtext(
   cex = size
 )
 
-# b. histogram of field plot month minus fire ignition month
+################################################################################
+# Plot b) Histogram of Delay Between Field Plots and Fire Ignition
+################################################################################
+
 plot_delay_range <- range(
   sync_fire_plot$Plots_month - sync_fire_plot$Fire_start_month
   )
@@ -196,7 +208,7 @@ mtext(
 )
 
 mtext(
-  text = "  b) Delay between field plots and fire ignition", 
+  text = "  b) Timing between field plots and fire ignition", 
   side = 3, 
   font = 2, 
   adj = 0, 
@@ -213,7 +225,9 @@ mtext(
   cex = size
 )
 
-# c. plot of field plot month by fire ignition month
+################################################################################
+# Plot c) RS Month vs Field Plot Month
+################################################################################
 
 plot(NA,
      xlim = c(month_min, month_max), 
@@ -310,7 +324,9 @@ mtext(
   cex = size
 )
 
-# d. histogram of rs data month minus field plot month
+################################################################################
+# Plot d) Histogram of RS Data Month Minus Field Plot Month
+################################################################################
 
 rs_delay_range <- range(
   sync_plot_imagery$Postfire_month - sync_plot_imagery$Plots_month
@@ -333,20 +349,25 @@ hist(
 )
 
 
-# Generate the sequence
+# Generate sequence for x-axis labels
 seq_values <- seq(rs_delay_range[1] - 4, rs_delay_range[2], 8)
 
-# Interleave with empty scalar ""
-interleaved <- c(rbind(seq_values, rep("", length(seq_values) - 1)))
+add_empty_between <- function(vec) {
+  # Create an interleaved vector of original values and empty strings
+  interleaved <- c(rbind(vec, rep("", length(vec) - 1)))
+  # Ensure the last element remains unchanged
+  end_idx <- which(as.numeric(interleaved) == max(seq_values))
+  interleaved <- interleaved[1:end_idx]
+  return(interleaved)
+}
+interleaved <- add_empty_between(seq_values)
 
-# Convert the interleaved result to a character vector
-interleaved <- as.character(interleaved)
 
 
 axis(
   side = 1, 
   at = seq(rs_delay_range[1] - 4,rs_delay_range[2], 4), 
-  labels = interleaved[-length(interleaved)], 
+  labels = interleaved, 
   cex.axis = 0.9, 
   cex.axis = 1.25,
   las = 1
@@ -370,7 +391,7 @@ mtext(
 )
 
 mtext(
-  text = "  d) Delay between remotely sensed data and \n      field plots", 
+  text = "  d) Timing between remotely sensed data and \n      field plots", 
   side = 3, 
   font = 2, 
   adj = 0, 
@@ -388,11 +409,17 @@ mtext(
 )
 
 
+################################################################################
+# Summary Statistics
+################################################################################
+
+# Calculate delay between field plots and fire ignition
 plot_delay_after_fire <- data.frame(
   mean = round(mean(sync_fire_plot$Plots_month - sync_fire_plot$Fire_start_month), 1),
   sd = round(sd(sync_fire_plot$Plots_month - sync_fire_plot$Fire_start_month), 1)
 )
 
+# Calculate delay between RS data and field plots
 imagery_delay_after_plots <- data.frame(
   mean = round(mean(sync_plot_imagery$Postfire_month - sync_plot_imagery$Plots_month), 1),
   sd = round(sd(sync_plot_imagery$Postfire_month - sync_plot_imagery$Plots_month), 1)

@@ -4,14 +4,11 @@ library(png)
 library(grid)
 
 # Import function for cleaning up spatial and temporal comparisons of R2 values
-source(file.path(repo_dir, "scripts", "clean_R2_metrics.R"))
+source(file.path("scripts", "functions", "calc_plot_dims.R"))
+source(file.path("scripts", "functions", "clean_R2_metrics.R"))
 
-calc_plot_dims <- function(w, h, orig_res, target_res) {
-  scaling_factor <- target_res / orig_res
-  new_width <- w * scaling_factor
-  new_height <- h * scaling_factor
-  return(list(w = new_width, h = new_height, r = target_res))
-}
+
+
 
 # Define metrics that need to be squared to align with R2 values
 metrics_to_square <- c(
