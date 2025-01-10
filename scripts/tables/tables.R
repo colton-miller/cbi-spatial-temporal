@@ -117,6 +117,29 @@ ind_to_remove <- which(
 
 image_type_by_shape <- image_type_by_shape[-ind_to_remove, ]
 
+# Summing all Sentinel (2, MSI) imagery types into one row
+image_type_by_shape <- rbind(
+  image_type_by_shape, 
+  colSums(
+    image_type_by_shape[
+      rownames(image_type_by_shape) %in% c(
+        "Sentinel 2A", "Sentinel 2 MSI"
+      ), 
+    ]
+  )
+)
+
+rownames(image_type_by_shape)[nrow(image_type_by_shape)] <- "Sentinel MSI"
+
+# Remove original Landsat rows
+ind_to_remove <- which(
+  rownames(image_type_by_shape) 
+  %in% 
+    c("Sentinel 2A", "Sentinel 2 MSI")
+)
+
+image_type_by_shape <- image_type_by_shape[-ind_to_remove, ]
+
 # Keep only circular and square columns and sort by sensor name
 image_type_by_shape <- image_type_by_shape[, which(
   colnames(image_type_by_shape) %in% c("Circular", "Square")
