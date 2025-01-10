@@ -162,7 +162,7 @@ colnames(temporal_plots_rs_summary) <- c("Citation", "Frequency")
 
 
 aligned_comparisons <- read.csv("tables/number_aligned_comarisons.csv")
-misaligned_comparisons <- read.csv("tables/number_misaligned_comparisons.csv")
+misaligned_comparisons <- read.csv("tables/results_model_perf_dissim_number_misaligned_n_comparisons.csv")
 
 number_comparisons_by_type <- data.frame(
   spatial_circular = sum(spatial_circ_summary$Frequency),

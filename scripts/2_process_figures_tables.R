@@ -116,7 +116,7 @@ dev.off()
 
 
 ### Figure 7: Synchrony and Alignment vs. R² ###
-plot_dims <- calc_plot_dims(w = 800, h = 800, orig_res = 72, target_res = 300)
+plot_dims <- calc_plot_dims(w = 1000, h = 500, orig_res = 72, target_res = 300)
 png(
   filename = "plots/MillerFig7.png", 
   width = plot_dims$w, 
@@ -124,6 +124,17 @@ png(
   res = plot_dims$r
 )
 source(file.path(repo_dir, "scripts", "figures", "fig7_plots.R"))
+
+ggarrange(effect_plots_fire,
+          effect_rs_plots, 
+          ncol = 2, align = "h",
+          labels = c("a) Timing between field plots and fire ignition", "b) Timing between remotely sensed data and \n      field plots"), # Add panel labels
+          label.x = 0.08,          # Adjust horizontal position of labels
+          label.y = 0.98, 
+          hjust = -0.1,
+          vjust = 1
+)
+
 dev.off()
 
 ################################################################################
@@ -132,33 +143,68 @@ dev.off()
 # write.csv(plot_delay_after_fire, file = "tables/imagery_delay_after_plots.csv", row.names = FALSE)
 # write.csv(imagery_delay_after_plots, file = "tables/imagery_delay_after_plots.csv", row.names = FALSE)
 
-# Write summaries and tables to CSV
+# Write summaries and tables to CSV (produced in fig 7 script)
+
+write.csv(
+  number_misaligned_comparisons,
+  file = file.path("tables", "results_model_perf_dissim_number_misaligned_n_comparisons.csv"),
+  row.names = FALSE
+)
+
+write.csv(
+  aligned_model_set_means,
+  file = file.path("tables", "results_model_perf_sim_model_set_means.csv"),
+  row.names = FALSE
+)
+
 write.csv(
   sync_size_circular_summary_table, 
-  file = file.path("intermediate_data", "sync_size_circular_summary_table.csv"), 
+  file = file.path("tables", "tab_dissim_sync_size_circular_summary_table.csv"), 
   row.names = FALSE
 )
 
 if (exists("sync_size_square_summary_table")) {
   write.csv(
     sync_size_square_summary_table, 
-    file = file.path("intermediate_data", "sync_size_square_summary_table.csv"), 
+    file = file.path("tables", "tab_dissim_sync_size_square_summary_table.csv"), 
     row.names = FALSE
   )
 }
 
 write.csv(
   sync_temp_plot_fire_summary_table, 
-  file = file.path("intermediate_data", "sync_temp_plot_fire_summary_table.csv"), 
+  file = file.path("tables", "tab_dissim_sync_temp_plot_fire_summary_table.csv"), 
   row.names = FALSE
 )
 write.csv(
   sync_temp_rs_plot_summary_table, 
-  file = file.path("intermediate_data", "sync_temp_rs_plot_summary_table.csv"), 
+  file = file.path("tables", "tab_dssim_sync_temp_rs_plot_summary_table.csv"), 
   row.names = FALSE
 )
 
+write.csv(
+  circular_all_three, 
+  file = file.path("tables", "res_dissim_circular_all_three.csv"), 
+  row.names = FALSE
+)
+
+if (exists("square_all_three")) {
+  write.csv(
+    square_all_three, 
+    file = file.path("tables", "res_dissim_square_all_three.csv"), 
+    row.names = FALSE
+  )
+}
+
+
+
 source(file.path(repo_dir, "scripts", "tables", "tables.R"))
+
+write.csv(
+  unique_studies, 
+  file = file.path("tables", "sup_tab_study_selection_unique_studies.csv"), 
+  row.names = FALSE
+)
 
 write.csv(
   n_unique_studies, 
