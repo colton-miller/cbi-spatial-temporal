@@ -5,6 +5,7 @@
 library(ggplot2)
 library(ggpubr)
 library(grid)
+library(jsonlite)
 library(this.path)
 
 ################################################################################
@@ -137,6 +138,17 @@ ggarrange(effect_plots_fire,
 
 dev.off()
 
+plot_dims <- calc_plot_dims(w = 600, h = 600, orig_res = 72, target_res = 300)
+png(
+  filename = "plots/MillerS2.png", 
+  width = plot_dims$w, 
+  height = plot_dims$h, 
+  res = plot_dims$r
+)
+par(mfrow = c(2, 2))
+plot(model_step, pch = 16, col = rgb(0, 0, 0, 0.5), bty = "n")
+dev.off()
+
 ################################################################################
 # Save Tables
 ################################################################################
@@ -196,6 +208,21 @@ if (exists("square_all_three")) {
   )
 }
 
+
+# Extract key summary components, including p-values
+summary_list <- list(
+  coefficients = as.data.frame(summary(model_step)$coefficients), # Includes p-values
+  r_squared = summary(model_step)$r.squared,
+  adj_r_squared = summary(model_step)$adj.r.squared,
+  f_statistic = summary(model_step)$fstatistic
+)
+
+# Save to JSON
+write_json(
+  summary_list, 
+  file.path("tables", "tab_model_results_alignment_synchrony.json"), 
+  pretty = TRUE
+  )
 
 
 source(file.path(repo_dir, "scripts", "tables", "tables.R"))
