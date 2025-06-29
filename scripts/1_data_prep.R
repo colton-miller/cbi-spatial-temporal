@@ -189,3 +189,4 @@ write.csv(
   file.path("intermediate_data", "sync_size_square.csv"), 
   row.names = FALSE
   )
+

@@ -173,8 +173,6 @@ model_step <- step(
 
 # Summary of the selected model
 model_step_summary <- summary(model_step)
-par(mfrow = c(2, 2))
-plot(model_step, pch = 16, col = rgb(0, 0, 0, 0.5), bty = "n")
 
 ################################################################################
 # Create effects plots

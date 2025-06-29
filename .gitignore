@@ -6,15 +6,16 @@ logs/
 
 # Ignore the plots directory contents
 plots/*
-!plots/
-.Rhistory
-.DS_Store
-.DS_Store
+!plots/.gitkeep
 
 # Ignore the tables directory contents
 tables/*
-!tables/
+!tables/.gitkeep
 
 # Ignore the intermediate data directory contents
 intermediate_data/*
-!intermediate_data/
+!intermediate_data/.gitkeep
+
+# Misc
+.Rhistory
+.DS_Store
