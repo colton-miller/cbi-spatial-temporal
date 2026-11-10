@@ -446,6 +446,42 @@ loboda <- data.frame(
 loboda$d <- loboda$RdNBR_jun11 - loboda$RdNBR_sep10
 loboda_d <- mean(loboda$d)   # average across pre-fire baselines
 
+# Supplementary table: one row per study
+# average numeric columns within study (e.g., Stambaugh's two extraction methods)
+num_cols <- c("delay_early", "r2_early", "delay_near", "r2_near", "d")
+supp <- aggregate(pairs[, num_cols], by = list(study = pairs$study), FUN = mean)
+
+# add text columns (one value per study)
+info <- pairs[!duplicated(pairs$study), c("study", "index", "metric")]
+supp <- merge(info, supp, by = "study")
+
+# Loboda row: mean R2 across the five pre-fire baselines.
+# Delays averaged across fires (field sampling June 2011 for four fires, August 2011
+# for Kaluktavik River): Sep 2010 = -9.4 months, Jun 2011 = -0.4 months.
+loboda_row <- data.frame(
+  study       = "Loboda et al. (2013)",
+  index       = "RdNBR",
+  metric      = "R2",
+  delay_early = -9.4,
+  r2_early    = mean(loboda$RdNBR_sep10),
+  delay_near  = -0.4,
+  r2_near     = mean(loboda$RdNBR_jun11),
+  d           = loboda_d
+)
+supp <- rbind(supp, loboda_row)
+supp <- supp[order(supp$study), ]
+
+# round for reporting and drop the helper column
+within_sync_tab <- supp[, c("study", "index", "metric", num_cols)]
+within_sync_tab[, num_cols] <- round(within_sync_tab[, num_cols], 2)
+names(within_sync_tab) <- c("Study", "Index", "Metric reported",
+                     "Earliest image delay (months)", "R2 earliest",
+                     "Nearest image delay (months)", "R2 nearest", "Delta R2")
+rownames(within_sync_tab) <- NULL
+# ---- 3. One value per study and summary -------------------------------------
+by_study <- supp[, c("study", "d")]   # one value per study, including Loboda
+
+
 # One value per study and summary
 by_study <- aggregate(d ~ study, data = pairs, FUN = mean)
 by_study <- rbind(by_study, data.frame(study = "Loboda", d = loboda_d))
@@ -457,6 +493,8 @@ within_sync_ttest <- data.frame(n_studies = length(x), mean_dR2 = mean(x), media
                       ci_low = tt$conf.int[1], ci_high = tt$conf.int[2], p = tt$p.value,
                       n_negative = sum(x < 0), n_zero = sum(x == 0), n_positive = sum(x > 0))
 
+within_sync_ttest <- round(within_sync_ttest, 3)
+
 # Sensitivity: Wilcoxon signed-rank test (no normality assumption)
 # Zero differences carry no sign, so they are dropped; with no zeros or ties
 # left, R can compute the exact p-value.
@@ -464,10 +502,5 @@ x_nonzero <- x[x != 0]
 within_sync_wilcox <- wilcox.test(x_nonzero, mu = 0, exact = TRUE)
 within_sync_wilcox <- data.frame(
   stat = within_sync_wilcox$statistic,
-  p = within_sync_wilcox$p.value
+  p = round(within_sync_wilcox$p.value, 3)
 )
-
-# Create output table for supplemental
-within_sync_tab <- pairs[, c("study", "index", "metric", "delay_early", "r2_early", "delay_near", "r2_near", "d")]
-within_sync_tab[, 4:ncol(within_sync_tab)] <- round(within_sync_tab[, 4:ncol(within_sync_tab)], 2)
-
