@@ -317,4 +317,20 @@ write.csv(
   file = file.path("tables", "results_field_plot_after_imagery_timing_range_average.csv"), 
   row.names = FALSE
 )
+write.csv(
+  within_sync_ttest,
+  file = file.path("tables", "tab_within_sync_ttest.csv"),
+  row.names = FALSE
+  )
+write.csv(
+  within_sync_wilcox,
+  file = file.path("tables", "tab_within_sync_wilcox.csv"),
+  row.names = FALSE
+)
+write.csv(
+  within_sync_tab,
+  file = file.path("tables", "tab_within_sync_results.csv"),
+  row.names = FALSE
+)
+
 
