@@ -174,6 +174,17 @@ model_step <- step(
 # Summary of the selected model
 model_step_summary <- summary(model_step)
 
+ci <- confint(model_step)   # 95% CI by default
+coefs <- data.frame(
+  term     = rownames(ci),
+  estimate = coef(model_step),
+  ci_low   = ci[, 1],
+  ci_high  = ci[, 2],
+  p        = summary(model_step)$coefficients[, "Pr(>|t|)"]
+)
+coefs[, 2:5] <- round(coefs[, 2:5] * 12, 2)
+model_step_coefs <- coefs
+
 ################################################################################
 # Create effects plots
 ################################################################################

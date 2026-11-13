@@ -208,6 +208,11 @@ if (exists("square_all_three")) {
   )
 }
 
+write.csv(
+  model_step_coefs, 
+  file = file.path("tables", "res_model_step_coefs_per12mo.csv"), 
+  row.names = FALSE
+)
 
 # Extract key summary components, including p-values
 summary_list <- list(
