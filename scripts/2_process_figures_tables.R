@@ -208,6 +208,11 @@ if (exists("square_all_three")) {
   )
 }
 
+write.csv(
+  model_step_coefs, 
+  file = file.path("tables", "res_model_step_coefs_per12mo.csv"), 
+  row.names = FALSE
+)
 
 # Extract key summary components, including p-values
 summary_list <- list(
@@ -224,6 +229,10 @@ write_json(
   pretty = TRUE
   )
 
+
+################################################################################
+# Run table script and save outputs
+################################################################################
 
 source(file.path(repo_dir, "scripts", "tables", "tables.R"))
 
@@ -317,4 +326,20 @@ write.csv(
   file = file.path("tables", "results_field_plot_after_imagery_timing_range_average.csv"), 
   row.names = FALSE
 )
+write.csv(
+  within_sync_ttest,
+  file = file.path("tables", "tab_within_sync_ttest.csv"),
+  row.names = FALSE
+  )
+write.csv(
+  within_sync_wilcox,
+  file = file.path("tables", "tab_within_sync_wilcox.csv"),
+  row.names = FALSE
+)
+write.csv(
+  within_sync_tab,
+  file = file.path("tables", "tab_within_sync_results.csv"),
+  row.names = FALSE
+)
+
 

@@ -353,3 +353,154 @@ field_plot_after_imagery_timing_df <- data.frame(
 field_plot_after_imagery_timing_df$Value <- round(field_plot_after_imagery_timing_df$Value, 1)
 
 
+################################################################################
+# Within-study effect of temporal synchrony on model R2 (base R; readxl only to read the xlsx)
+################################################################################
+
+# Studies from the comparison database with multi-timing comparisons
+studies <- "Cocke|Allen|Veraverbeke|Chen|Strand|Stambaugh|Boucher|Quintano"
+within_sync <- comparisons[comparisons$Duplicate_fire_notes %in% "timing comparisons" & grepl(studies, comparisons$Authors), ]
+
+# Convert months to numeric
+for (v in c("Plots_month_avg", "Postfire_month_avg", "Plots_year", "Postfire_year")) {
+  within_sync[[v]] <- suppressWarnings(as.numeric(within_sync[[v]]))
+}
+
+# Drop double metrics (in this case just sagebrush in Strand)
+metrics_list <- strsplit(within_sync$Highest_model, ";")
+metrics_list <- lapply(metrics_list, function(x) x[!grepl("sagebrush", x)])
+stopifnot(all(lengths(metrics_list) == 1))
+
+# Extract metric value
+within_sync$r2 <- as.numeric(sub(".*:\\s?", "", unlist(metrics_list)))
+
+# Square metrics if needed
+metrics_to_square <- c(
+  "Pearson correlation coefficeint r",
+  "r",
+  "|r|",
+  "R"
+)
+within_sync[within_sync$Model_metric %in% metrics_to_square, ]$r2 <- 
+  within_sync[within_sync$Model_metric %in% metrics_to_square, ]$r2^2
+
+
+within_sync$metric_label <- sub(":\\s?-?\\d*\\.?\\d*$", "", unlist(metrics_list))
+
+# Months from field sampling to image acquisition (negative = image before field)
+within_sync$delay <- (within_sync$Postfire_year - within_sync$Plots_year) * 12 + 
+  (within_sync$Postfire_month_avg - within_sync$Plots_month_avg)
+
+# Boucher: same pooled model listed once per fire
+within_sync <- within_sync[!duplicated(within_sync[, c("Citation", "Smoothing", "delay", "r2")]), ]
+
+# Earliest image vs. image nearest the field sampling date, within fire x smoothing
+within_sync$group <- paste(within_sync$Citation, within_sync$Fire_name, within_sync$Smoothing, sep = " | ")
+groups    <- split(within_sync, within_sync$group)   # one data frame per study x fire x smoothing
+
+pair_list <- list()
+for (name in names(groups)) {
+  g <- groups[[name]]
+  
+  # need at least two image dates to make a comparison
+  if (nrow(g) < 2) next
+  
+  # sort image dates from earliest to latest
+  g <- g[order(g$delay), ]
+  
+  # earliest image = first row after sorting
+  early <- g[1, ]
+  
+  # nearest image = among the remaining rows, the one closest to the field date
+  # (smallest absolute delay); +1 converts back to a row number in g
+  remaining   <- g[-1, ]
+  nearest_row <- which.min(abs(remaining$delay)) + 1
+  near        <- g[nearest_row, ]
+  
+  pair_list[[name]] <- data.frame(
+    study       = paste(early$Authors, early$Year, early$Jounral),
+    index       = early$metric_label,
+    metric      = early$Model_metric,
+    fire        = early$Fire_name,
+    smoothing   = early$Smoothing,
+    delay_early = early$delay,
+    r2_early    = early$r2,
+    delay_near  = near$delay,
+    r2_near     = near$r2
+  )
+}
+
+pairs <- do.call(rbind, pair_list)   # stack the one-row data frames
+pairs$d <- pairs$r2_near - pairs$r2_early
+rownames(pairs) <- NULL
+
+# Add loboda et al., Appendix D
+# Delta (pre - post) regression R2 for RdNBR; post-fire images with equal n,
+# one row per pre-fire baseline
+loboda <- data.frame(
+  prefire     = c("4-Jun-09", "20-Jun-09", "16-Aug-09", "30-May-10", "23-Jun-10"),
+  n           = c(42, 52, 64, 51, 59),
+  RdNBR_sep10 = c(0.76, 0.68, 0.68, 0.73, 0.69),
+  RdNBR_jun11 = c(0.77, 0.80, 0.77, 0.81, 0.77)
+)
+loboda$d <- loboda$RdNBR_jun11 - loboda$RdNBR_sep10
+loboda_d <- mean(loboda$d)   # average across pre-fire baselines
+
+# Supplementary table: one row per study
+# average numeric columns within study (e.g., Stambaugh's two extraction methods)
+num_cols <- c("delay_early", "r2_early", "delay_near", "r2_near", "d")
+supp <- aggregate(pairs[, num_cols], by = list(study = pairs$study), FUN = mean)
+
+# add text columns (one value per study)
+info <- pairs[!duplicated(pairs$study), c("study", "index", "metric")]
+supp <- merge(info, supp, by = "study")
+
+# Loboda row: mean R2 across the five pre-fire baselines.
+# Delays averaged across fires (field sampling June 2011 for four fires, August 2011
+# for Kaluktavik River): Sep 2010 = -9.4 months, Jun 2011 = -0.4 months.
+loboda_row <- data.frame(
+  study       = "Loboda et al. (2013)",
+  index       = "RdNBR",
+  metric      = "R2",
+  delay_early = -9.4,
+  r2_early    = mean(loboda$RdNBR_sep10),
+  delay_near  = -0.4,
+  r2_near     = mean(loboda$RdNBR_jun11),
+  d           = loboda_d
+)
+supp <- rbind(supp, loboda_row)
+supp <- supp[order(supp$study), ]
+
+# round for reporting and drop the helper column
+within_sync_tab <- supp[, c("study", "index", "metric", num_cols)]
+within_sync_tab[, num_cols] <- round(within_sync_tab[, num_cols], 2)
+names(within_sync_tab) <- c("Study", "Index", "Metric reported",
+                     "Earliest image delay (months)", "R2 earliest",
+                     "Nearest image delay (months)", "R2 nearest", "Delta R2")
+rownames(within_sync_tab) <- NULL
+# ---- 3. One value per study and summary -------------------------------------
+by_study <- supp[, c("study", "d")]   # one value per study, including Loboda
+
+
+# One value per study and summary
+by_study <- aggregate(d ~ study, data = pairs, FUN = mean)
+by_study <- rbind(by_study, data.frame(study = "Loboda", d = loboda_d))
+
+# Create t-test
+x  <- by_study$d
+tt <- t.test(x)
+within_sync_ttest <- data.frame(n_studies = length(x), mean_dR2 = mean(x), median_dR2 = median(x),
+                      ci_low = tt$conf.int[1], ci_high = tt$conf.int[2], p = tt$p.value,
+                      n_negative = sum(x < 0), n_zero = sum(x == 0), n_positive = sum(x > 0))
+
+within_sync_ttest <- round(within_sync_ttest, 3)
+
+# Sensitivity: Wilcoxon signed-rank test (no normality assumption)
+# Zero differences carry no sign, so they are dropped; with no zeros or ties
+# left, R can compute the exact p-value.
+x_nonzero <- x[x != 0]
+within_sync_wilcox <- wilcox.test(x_nonzero, mu = 0, exact = TRUE)
+within_sync_wilcox <- data.frame(
+  stat = within_sync_wilcox$statistic,
+  p = round(within_sync_wilcox$p.value, 3)
+)
